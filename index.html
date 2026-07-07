@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>أسعار المحل</title>
+
+<style>
+body{
+    font-family: Arial, sans-serif;
+    background:#f5f5f5;
+    margin:0;
+    padding:30px;
+}
+
+.container{
+    max-width:700px;
+    margin:auto;
+}
+
+h1{
+    text-align:center;
+    color:#2c3e50;
+}
+
+#search{
+    width:100%;
+    padding:15px;
+    font-size:20px;
+    border-radius:10px;
+    border:1px solid #ccc;
+    box-sizing:border-box;
+}
+
+.item{
+    background:white;
+    margin-top:10px;
+    padding:15px;
+    border-radius:10px;
+    display:flex;
+    justify-content:space-between;
+    font-size:20px;
+    box-shadow:0 2px 5px rgba(0,0,0,.1);
+}
+
+.price{
+    color:green;
+    font-weight:bold;
+}
+</style>
+</head>
+
+<body>
+
+<div class="container">
+
+<h1>أسعار المحل</h1>
+
+<input
+id="search"
+type="text"
+placeholder="اكتب اسم الصنف...">
+
+<div id="results"></div>
+
+</div>
+
+<script>
+
+const products = [
+
+{name:"كوكاكولا 250 مل",price:"20 جنيه"},
+{name:"بيبسي 330 مل",price:"22 جنيه"},
+{name:"مياه 600 مل",price:"10 جنيه"},
+{name:"شيبسي ملح",price:"15 جنيه"},
+{name:"لبن جهينة",price:"38 جنيه"}
+
+];
+
+const search=document.getElementById("search");
+const results=document.getElementById("results");
+
+function showProducts(text){
+
+results.innerHTML="";
+
+products
+.filter(p=>p.name.includes(text))
+.forEach(p=>{
+
+results.innerHTML+=`
+<div class="item">
+<span>${p.name}</span>
+<span class="price">${p.price}</span>
+</div>
+`;
+
+});
+
+}
+
+showProducts("");
+
+search.addEventListener("input",()=>{
+
+showProducts(search.value);
+
+});
+
+</script>
+
+</body>
+</html>
