@@ -6,47 +6,69 @@
 <title>أسعار المحل</title>
 
 <style>
+
+*{
+    box-sizing:border-box;
+}
+
 body{
     font-family: Arial, sans-serif;
-    background:#f5f5f5;
+    background:#f3f4f6;
     margin:0;
-    padding:30px;
+    padding:20px;
 }
 
 .container{
-    max-width:700px;
+    max-width:600px;
     margin:auto;
+}
+
+.logo{
+    width:90px;
+    height:90px;
+    background:white;
+    border-radius:50%;
+    margin:10px auto;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    box-shadow:0 3px 10px #ddd;
+    font-size:40px;
 }
 
 h1{
     text-align:center;
-    color:#2c3e50;
+    color:#d35400;
+    margin-bottom:25px;
 }
 
 #search{
     width:100%;
-    padding:15px;
-    font-size:20px;
-    border-radius:10px;
-    border:1px solid #ccc;
-    box-sizing:border-box;
+    padding:18px;
+    border:none;
+    border-radius:15px;
+    font-size:18px;
+    box-shadow:0 3px 10px #ddd;
+    outline:none;
 }
 
 .item{
     background:white;
-    margin-top:10px;
-    padding:15px;
-    border-radius:10px;
+    margin-top:15px;
+    padding:18px;
+    border-radius:15px;
     display:flex;
     justify-content:space-between;
-    font-size:20px;
-    box-shadow:0 2px 5px rgba(0,0,0,.1);
+    align-items:center;
+    box-shadow:0 3px 10px #ddd;
+    font-size:18px;
 }
 
 .price{
-    color:green;
+    color:#16a085;
     font-weight:bold;
 }
+
 </style>
 </head>
 
