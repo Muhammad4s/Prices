@@ -67,15 +67,30 @@ placeholder="اكتب اسم الصنف...">
 
 <script>
 
-const products = [
+let products = [];
 
-{name:"كوكاكولا 250 مل",price:"20 جنيه"},
-{name:"بيبسي 330 مل",price:"22 جنيه"},
-{name:"مياه 600 مل",price:"10 جنيه"},
-{name:"شيبسي ملح",price:"15 جنيه"},
-{name:"لبن جهينة",price:"38 جنيه"}
+fetch("https://docs.google.com/spreadsheets/d/e/2PACX-1vSQ-3vJOiDehFOVjBKd7ruYF9EV6F-GJp5JBzj2nU9ew5-dCf275Qbze4DcIvkac18Nw8fuFtswx-Un/pub?output=csv")
+.then(response => response.text())
+.then(data => {
 
-];
+const rows = data.trim().split("\n");
+
+rows.shift();
+
+products = rows.map(row => {
+
+const cols = row.split(",");
+
+return {
+name: cols[0],
+price: cols[1] + " جنيه"
+};
+
+});
+
+showProducts("");
+
+});
 
 const search=document.getElementById("search");
 const results=document.getElementById("results");
