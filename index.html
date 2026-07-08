@@ -20,15 +20,15 @@ box-sizing:border-box;
 
 
 body{
-font-family:'Tajawal', sans-serif;
-background:#f5f5f5;
+font-family:'Tajawal',sans-serif;
+background:#f4f4f4;
 margin:0;
 padding:20px;
 }
 
 
 .container{
-max-width:600px;
+max-width:650px;
 margin:auto;
 }
 
@@ -36,112 +36,173 @@ margin:auto;
 /* اللوجو */
 
 .logo{
-width:100px;
-height:100px;
+width:110px;
+height:110px;
+margin:10px auto;
 background:white;
 border-radius:50%;
-margin:10px auto;
-display:flex;
-align-items:center;
-justify-content:center;
 overflow:hidden;
-box-shadow:0 4px 12px #ccc;
+box-shadow:0 5px 15px #ccc;
 }
 
 
 .logo img{
-width:130%;
-height:130%;
+width:100%;
+height:100%;
 object-fit:cover;
 }
+
 
 
 /* العنوان */
 
 h1{
 text-align:center;
-color:#d35400;
-font-size:32px;
+font-size:34px;
 font-weight:800;
+color:#d35400;
 margin:15px 0 25px;
 }
 
 
+
 /* البحث */
 
+.search-box{
+position:relative;
+}
+
+
 #search{
+
 width:100%;
-padding:18px;
+padding:18px 45px 18px 18px;
 border:none;
-border-radius:15px;
+border-radius:18px;
+font-family:'Tajawal';
 font-size:18px;
-font-family:'Tajawal',sans-serif;
 font-weight:500;
 outline:none;
-box-shadow:0 3px 12px #ddd;
+box-shadow:0 4px 15px #ddd;
+
 }
 
 
-#search::placeholder{
-font-family:'Tajawal',sans-serif;
-}
+.clear{
 
-
-/* الاقتراحات */
-
-#suggestions{
-background:white;
-border-radius:10px;
-margin-top:5px;
-box-shadow:0 3px 10px #ddd;
-overflow:hidden;
-}
-
-
-.suggestion{
-padding:12px;
-border-bottom:1px solid #eee;
+position:absolute;
+left:15px;
+top:15px;
 cursor:pointer;
-font-size:18px;
+font-size:22px;
+color:#777;
+
 }
 
 
-.suggestion:hover{
-background:#f5f5f5;
+
+/* التصنيفات */
+
+.categories{
+
+display:flex;
+gap:10px;
+overflow-x:auto;
+margin:20px 0;
+padding-bottom:5px;
+
 }
+
+
+.category{
+
+background:white;
+padding:10px 18px;
+border-radius:25px;
+white-space:nowrap;
+cursor:pointer;
+font-weight:700;
+box-shadow:0 3px 10px #ddd;
+
+}
+
+
+.category.active{
+
+background:#d35400;
+color:white;
+
+}
+
 
 
 /* النتائج */
 
 .item{
+
 background:white;
 margin-top:15px;
-padding:18px;
-border-radius:15px;
+padding:20px;
+border-radius:18px;
 display:flex;
 justify-content:space-between;
 align-items:center;
+box-shadow:0 4px 12px #ddd;
+
+}
+
+
+.name{
+
 font-size:20px;
-font-weight:500;
-box-shadow:0 3px 10px #ddd;
+font-weight:700;
+
 }
 
 
 .price{
+
+font-size:22px;
+font-weight:800;
 color:#16a085;
-font-weight:bold;
+
 }
+
+
+
+.suggestion{
+
+background:white;
+padding:12px;
+border-bottom:1px solid #eee;
+cursor:pointer;
+font-size:18px;
+
+}
+
+
+#suggestions{
+
+border-radius:10px;
+overflow:hidden;
+
+}
+
 
 
 .empty{
+
 text-align:center;
-margin-top:30px;
+margin-top:40px;
+font-size:20px;
 color:#777;
-font-size:18px;
+
 }
 
 
+
 </style>
+
 
 </head>
 
@@ -154,28 +215,42 @@ font-size:18px;
 
 <div class="logo">
 
-<img src="logo.png" alt="Logo">
+<img src="logo.png">
 
 </div>
+
 
 
 <h1>قائمة الأسعار</h1>
 
 
-<input 
-id="search"
-type="text"
-placeholder="🔍 اكتب اسم الصنف..."
+
+<div class="search-box">
+
+<input id="search"
+placeholder="🔍 ابحث عن الصنف..."
 autocomplete="off">
+
+<div class="clear" onclick="clearSearch()">×</div>
+
+</div>
+
 
 
 <div id="suggestions"></div>
 
 
+
+<div class="categories" id="categories"></div>
+
+
+
 <div id="results"></div>
 
 
+
 </div>
+
 
 
 
@@ -184,33 +259,39 @@ autocomplete="off">
 
 let products=[];
 
+let selectedCategory="الكل";
+
+
 
 fetch("https://docs.google.com/spreadsheets/d/e/2PACX-1vSQ-3vJOiDehFOVjBKd7ruYF9EV6F-GJp5JBzj2nU9ew5-dCf275Qbze4DcIvkac18Nw8fuFtswx-Un/pub?output=csv")
 
 
-.then(response=>response.text())
+.then(r=>r.text())
 
 
 .then(data=>{
 
 
-const rows=data.trim().split("\n");
+let rows=data.trim().split("\n");
 
 
 rows.shift();
 
 
+
 products=rows.map(row=>{
 
 
-const cols=row.split(",");
+let cols=row.split(",");
 
 
-return{
+return {
 
 name:cols[0],
 
-price:cols[1] ? cols[1]+" جنيه" : "غير محدد"
+price:cols[1] ? cols[1]+" جنيه" : "",
+
+category:cols[2] || "أخرى"
 
 };
 
@@ -218,9 +299,14 @@ price:cols[1] ? cols[1]+" جنيه" : "غير محدد"
 });
 
 
+
+createCategories();
+
 showProducts("");
 
 });
+
+
 
 
 
@@ -232,23 +318,100 @@ const suggestions=document.getElementById("suggestions");
 
 
 
+
+
+function createCategories(){
+
+
+let cats=["الكل"];
+
+
+products.forEach(p=>{
+
+if(!cats.includes(p.category))
+cats.push(p.category);
+
+});
+
+
+
+categories.innerHTML="";
+
+
+cats.forEach(c=>{
+
+
+categories.innerHTML+=`
+
+<div class="category ${c=="الكل"?"active":""}"
+onclick="chooseCategory('${c}',this)">
+
+${c}
+
+</div>
+
+`;
+
+
+});
+
+
+}
+
+
+
+
+
+function chooseCategory(cat,el){
+
+
+selectedCategory=cat;
+
+
+document.querySelectorAll(".category")
+.forEach(x=>x.classList.remove("active"));
+
+
+el.classList.add("active");
+
+
+showProducts(search.value);
+
+
+}
+
+
+
+
+
 function showProducts(text){
 
 
 results.innerHTML="";
 
 
-let found=products.filter(p=>
-
-p.name.includes(text)
-
-);
+let found=products.filter(p=>{
 
 
+let nameMatch=p.name.includes(text);
 
-if(found.length===0){
 
-results.innerHTML='<div class="empty">الصنف غير موجود</div>';
+let catMatch=
+selectedCategory=="الكل" ||
+p.category==selectedCategory;
+
+
+return nameMatch && catMatch;
+
+
+});
+
+
+
+if(found.length==0){
+
+results.innerHTML=
+'<div class="empty">لا يوجد صنف</div>';
 
 return;
 
@@ -263,9 +426,9 @@ results.innerHTML+=`
 
 <div class="item">
 
-<span>${p.name}</span>
+<div class="name">${p.name}</div>
 
-<span class="price">${p.price}</span>
+<div class="price">${p.price}</div>
 
 </div>
 
@@ -276,6 +439,7 @@ results.innerHTML+=`
 
 
 }
+
 
 
 
@@ -288,20 +452,8 @@ let text=search.value;
 suggestions.innerHTML="";
 
 
-if(text===""){
-
-showProducts("");
-
-return;
-
-}
-
-
-
 let matches=products.filter(p=>
-
 p.name.includes(text)
-
 );
 
 
@@ -311,14 +463,14 @@ matches.slice(0,5).forEach(p=>{
 
 suggestions.innerHTML+=`
 
-<div class="suggestion" onclick="selectProduct('${p.name}')">
+<div class="suggestion"
+onclick="selectProduct('${p.name}')">
 
 ${p.name}
 
 </div>
 
 `;
-
 
 });
 
@@ -327,6 +479,8 @@ showProducts(text);
 
 
 });
+
+
 
 
 
@@ -339,6 +493,20 @@ suggestions.innerHTML="";
 
 showProducts(name);
 
+
+}
+
+
+
+
+function clearSearch(){
+
+
+search.value="";
+
+suggestions.innerHTML="";
+
+showProducts("");
 
 }
 
